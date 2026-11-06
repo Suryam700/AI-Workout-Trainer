@@ -1,7 +1,9 @@
+import os
 import streamlit as st
 from services.auth.login import render_login_wall
 from services.state.session_defaults import initial_session_defaults
 from services.config.workout_config import EXERCISE_OPTIONS
+from services.ui.style_loader import load_css, inject_local_font
 
 def main():
     st.set_page_config(
@@ -10,6 +12,9 @@ def main():
         initial_sidebar_state="expanded",
         layout="centered"
     )
+
+    load_css(os.path.join(os.getcwd(), "static", "style.css"))
+    inject_local_font(os.path.join(os.getcwd(), "static", "AdobeClean.otf"), "AdobeClean")
 
     if not render_login_wall():
         return
@@ -27,7 +32,7 @@ def main():
         if not st.session_state["workout_started"]:
             st.selectbox("Exercise", options=EXERCISE_OPTIONS, key="plan_exercise")
             st.number_input("Sets", min_value=1, key="plan_sets", step=1)
-            st.number_input("Sets", min_value=1, key="plan_reps", step=1)
+            st.number_input("Reps / Set", min_value=1, key="plan_reps", step=1)
 
             st.space()
 
@@ -48,12 +53,12 @@ def main():
             if st.session_state["workout_started"]:
                 st.divider()
 
-                exercise = st.session_state.get("exercise_type")
+                exercise = st.session_state.get("plan_exercise")
                 total_reps = st.session_state.get("reps")
                 current_set_reps = st.session_state.get("current_set_reps")
-                reps_per_set = st.session_state.get("plan_reps")
+                reps_per_set = st.session_state.get("reps_per_set")
                 sets_completed = st.session_state.get("sets_completed")
-                target_sets = st.session_state.get("plan_sets")
+                target_sets = st.session_state.get("target_sets")
 
                 st.subheader("Progress")
 
@@ -92,6 +97,8 @@ def main():
                     st.metric("Front Knee Angle", f"{st.session_state.front_knee_angle}°")
                     st.metric("Torso Angle", f"{st.session_state.torso_angle}°")
                     st.metric("Balance Status", st.session_state.balance_status)
+
+                
 
 if __name__ == "__main__":
     main()
