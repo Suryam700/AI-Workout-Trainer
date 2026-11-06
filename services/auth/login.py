@@ -1,4 +1,5 @@
 import streamlit as st
+from services.persistence.exercise_respository import get_or_create_user
 
 def render_login_wall():
     if st.session_state.get("user_id") is not None:
@@ -8,7 +9,7 @@ def render_login_wall():
     st.markdown("### Welcome! Please Enter a username to start...")
 
     with st.form("login_form", clear_on_submit=False):
-        username = st.text_input("Name (unique): ", placeholder="unique name e.g.: (Suryam@700)")
+        username = st.text_input("Name (unique): ", placeholder="unique name e.g.: (Suryam1403)")
         response = st.form_submit_button("Start Session", width="stretch")
 
     if response:
@@ -16,8 +17,10 @@ def render_login_wall():
             st.error("EmptyError: username shouldn't be empty")
             return False
 
-        st.session_state["username"] = username
-        st.session_state["user_id"] = "1"
+        user = get_or_create_user(username)
+
+        st.session_state["user_id"] = user["id"]
+        st.session_state["username"] = user["username"]
         st.rerun()
 
     return False
