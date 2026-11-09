@@ -3,8 +3,9 @@ import streamlit as st
 from services.auth.login import render_login_wall
 from services.state.session_defaults import initial_session_defaults
 from services.config.workout_config import EXERCISE_OPTIONS
-from services.ui.style_loader import load_css, inject_local_font
+from services.ui.style_loader import load_css, inject_local_font, inject_webrtc_styles
 from services.persistence.exercise_respository import init_db
+from streamlit_webrtc import webrtc_streamer, WebRtcMode
 
 def main():
     st.set_page_config(
@@ -39,17 +40,17 @@ def main():
 
             st.space()
 
-            if st.button("Start Session", width="stretch", key="start_session_button"):
+            if st.button("Start workout", width="stretch", key="start_workout_button"):
                 st.session_state["workout_started"] = True
 
-            st.rerun()
+                st.rerun()
         else:
             exercise = st.session_state["plan_exercise"]
             sets = st.session_state["plan_sets"]
             reps = st.session_state["plan_reps"]
             st.info(f"**{exercise}** -- {sets} Sets X {reps} Reps")
 
-            if st.button("End Session", key="end_session_button", width="stretch"):
+            if st.button("End Workout", key="end_workout_button", width="stretch"):
                 st.session_state["workout_started"] = False
                 st.rerun()
 
@@ -101,7 +102,48 @@ def main():
                     st.metric("Torso Angle", f"{st.session_state.torso_angle}°")
                     st.metric("Balance Status", st.session_state.balance_status)
 
-                
+    st.title("AI Real-Time GYM Trainer")
+    st.caption("Real-time pose detection with proactive AI Voice Coaching")
+
+    if not st.session_state["workout_started"]:
+        st.markdown("""
+            <div style="
+                border: 6px dashed #444;
+                border-radius: 0;
+                padding: 50px;
+                text-align: center;
+                margin: 30px 0;
+                color: #888;
+            ">
+                <h2 style="color: #ccc; margin-bottom: 8px;">👈 Set your workout plan</h2>
+                <p style="font-size: 1.1rem;">
+                    Choose your exercise, sets and reps in the sidebar,<br>
+                    then click Start Workout to activate the camera and AI coach.
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
+    else:
+        context = webrtc_streamer(
+            key="exercise-analysis",
+            mode=WebRtcMode.SENDRECV,
+            video_processor_factory=None,
+            rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+            media_stream_constraints={
+                "video": True,
+                "audio": False
+            },
+            async_processing=True
+        )
+
+    st.divider()
+
+    st.markdown("### Workout History")
+
+
+
+
+    
+    inject_webrtc_styles()
 
 if __name__ == "__main__":
     main()
