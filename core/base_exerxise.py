@@ -1,6 +1,5 @@
 import math
 from abc import ABC, abstractmethod
-import numpy as np
 
 class BaseExercise(ABC):
     def __init__(self):

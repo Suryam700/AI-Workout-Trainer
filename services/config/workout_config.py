@@ -1,1 +1,1 @@
-EXERCISE_OPTIONS = ["Squats", "Push-ups", "Bicep Curls (Dumbbell)", "Shoulder Press", "Lungs"]
+EXERCISE_OPTIONS = ["Squats", "Push-ups", "Biceps Curls (Dumbbell)", "Shoulder Press", "Lunges"]
