@@ -1,4 +1,4 @@
-from core.base_exerxise import BaseExercise
+from core.base_exercise import BaseExercise
 
 class SquatDetector(BaseExercise):
     DOWN_THRESHOLD = 100
