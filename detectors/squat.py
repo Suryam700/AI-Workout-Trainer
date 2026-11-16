@@ -22,13 +22,13 @@ class SquatDetector(BaseExercise):
         self.stage = None
 
     def process(self, landmarks):
-        left_knee_angle = self.calc_angle(
+        left_knee_angle = self.calculate_angle(
             self.get_point(landmarks, self.LEFT_HIP),
             self.get_point(landmarks, self.LEFT_KNEE),
             self.get_point(landmarks, self.LEFT_ANKLE)
         )
 
-        right_knee_angle = self.calc_angle(
+        right_knee_angle = self.calculate_angle(
             self.get_point(landmarks, self.RIGHT_HIP),
             self.get_point(landmarks, self.RIGHT_KNEE),
             self.get_point(landmarks, self.RIGHT_ANKLE)
@@ -44,7 +44,7 @@ class SquatDetector(BaseExercise):
             knee_angle = right_knee_angle
             hip_idx, knee_idx, ankle_idx, shoulder_idx = self.RIGHT_HIP, self.RIGHT_KNEE, self.RIGHT_ANKLE, self.RIGHT_SHOULDER
 
-        back_angle = self.calc_angle(
+        back_angle = self.calculate_angle(
             self.get_point(landmarks, shoulder_idx),
             self.get_point(landmarks, hip_idx),
             self.get_point(landmarks, knee_idx)

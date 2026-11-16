@@ -187,7 +187,7 @@ class VideoProcessor(VideoProcessorBase):
         )
 
         mp_img = mp.Image(
-            image_formet=mp.ImageFormat.SRGB,
+            image_format=mp.ImageFormat.SRGB,
             data=cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         )
 
