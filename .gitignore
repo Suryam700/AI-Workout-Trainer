@@ -1,3 +1,4 @@
 question.txt
 /.venv
 /.streamlit
+.env

@@ -31,7 +31,7 @@ class LLMCoach:
             temperature=0.4
         )
 
-        text = response.choise[0].message.content.strip()
+        text = response.choices[0].message.content.strip()
 
         self.history.append({
             "role": "assistant",
